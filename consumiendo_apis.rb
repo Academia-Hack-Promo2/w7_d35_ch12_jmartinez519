@@ -16,4 +16,31 @@
 
 # La entrega debe hacerse vía github
 require 'httparty'
+require 'colorize'
+
+response = HTTParty.get("http://www.reddit.com/.json")
+# parsed_response = JSON.parse(response.author)
+response["data"]["children"].each do |new|
+ puts "#{new["data"]["author"]}".colorize(:blue)  
+ puts "#{new["data"]["title"]} "
+ puts "#{new["data"]["url"]} "
+ puts "#{new["data"]["created_utc"]}\n\n"
+end
+
+
+# class Reddit
+#   include HTTParty
+#   base_uri 'http://www.reddit.com/.json'
+
+
+#   def news
+#     self.class.get('',:query => {:author => author})
+#   end
+
+# end
+
+# reader = Reddit.new
+
+# print reader.news
+
 
