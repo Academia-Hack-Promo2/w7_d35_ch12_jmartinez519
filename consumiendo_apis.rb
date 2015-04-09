@@ -19,9 +19,11 @@
 require 'httparty'
 require 'colorize'
 
+
+
 class Reddit
   include HTTParty
-  base_uri 'http://www.reddit.com/.json?limit=10'
+  base_uri 'http://www.reddit.com/.json?limit=20'
 
 
   def news
@@ -31,8 +33,8 @@ class Reddit
     response["data"]["children"].each do |new|
     puts "#{new["data"]["author"]}".colorize(:blue)  
     puts "#{new["data"]["title"]} "
-    puts "#{new["data"]["created_utc"]}"
-    puts "#{new["data"]["url"]}\n\n"
+    puts "#{Time.at(new["data"]["created_utc"])}"
+    puts "#{"https://www.reddit.com"+new["data"]["permalink"]}\n\n"
     end
   end
 end
@@ -47,7 +49,7 @@ class Mashable
     puts "\t\t\t\tMashable".colorize(:red)
 
     response = HTTParty.get("http://mashable.com/stories.json?limit=10")
-    response["hot"].each do |new|
+    response["new"].each do |new|
     puts "#{new["author"]}".colorize(:blue)  
     puts "#{new["title"]} "
     puts "#{new["post_date"]}"
@@ -69,13 +71,22 @@ class Digg
     response["data"]["feed"].each do |new|
     puts "#{new["content"]["author"]}".colorize(:blue)  
     puts "#{new["content"]["title_alt"]}"
-    puts "#{new["date_published"]}"
+    puts "#{Time.at(new["date_published"])}"
     puts "#{new["content"]["url"]}\n\n"
     end
   end
 end
 
+class Feed 
 
+  def find
+  end
+
+  def show
+  end
+
+
+end
 
 def main
   reddit_feed = Reddit.new
