@@ -77,17 +77,6 @@ class Digg
   end
 end
 
-class Feed 
-
-  def find
-  end
-
-  def show
-  end
-
-
-end
-
 def main
   reddit_feed = Reddit.new
   reddit_feed.news
