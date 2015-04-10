@@ -77,6 +77,7 @@ class News
      format_news = "\n#{@author}"\
                    "\n#{@title}"\
                    "\n#{@date}"\
+                   "\n#{@link}"\
                    "\n#{@feed}"
     return format_news
   end
@@ -205,6 +206,3 @@ main
 # d = Feed.now(:digg)
 # d.First.author
 # d.First.Feed
-
-
-
