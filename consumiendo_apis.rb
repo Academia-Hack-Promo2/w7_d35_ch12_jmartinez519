@@ -19,6 +19,8 @@
 require 'httparty'
 require 'colorize'
 
+# Instacia las clases Reddit, Mashable y Digg.
+#  
 class Feed
   def initialize
     @newsarr = []
@@ -28,86 +30,96 @@ class Feed
     case
      when site == "reddit"
        @r = Reddit.new
-       @formato_reddit = @r.format @r.news
+       @formato_reddit = @r.format @r.getjson
        @newsarr.push(@formato_reddit)
-       puts @newsarr.first
+       puts
+       puts "===============================================".colorize(:yellow)
+       puts "\t\t\tReddit".colorize(:yellow)
+       puts "===============================================".colorize(:yellow)
+       puts @newsarr
      when site == "mashable"
        @m = Mashable.new
-       @formato_mashable = @m.format @m.news
+       @formato_mashable = @m.format @m.getjson
        @newsarr.push(@formato_mashable)
+       puts "===============================================".colorize(:blue)
+       puts "\t\tMashable".colorize(:blue)
+       puts "===============================================".colorize(:blue)
        puts @newsarr
      when site == "digg"
        @d = Digg.new
-       @formato_digg = @d.format @d.news
+       @formato_digg = @d.format @d.getjson
        @newsarr.push(@formato_digg)
+       puts "===============================================".colorize(:red)
+       puts "\t\t\tDigg".colorize(:red)
+       puts "===============================================".colorize(:red)
        puts @newsarr
      else
       return "Error en el nombre del site"
     end
   end
 
-  # def author name
-  #  # arr.map { |a| 2*a }
-  #   @newsarr.map do |new| 
-  #     if new["author"] == name
-  #     end
-  #   end 
-  # end
-
 end
 
-class Noticias
+# Instancia cada noticia para poder acceder a sus atributos.
+class News
 
-  def res
+  attr_accessor :author, :title, :date, :link, :feed 
 
+  def initialize(author, title, date, link, feed)
+    @author = author
+    @title = title
+    @date = date
+    @link = link
+    @feed = feed
   end
+
 end
 
 class Reddit
   include HTTParty
-  base_uri 'http://www.reddit.com/.json?limit=20'
+  base_uri 'http://www.reddit.com/.json?limit=10'
 
 
-    def news
+    def getjson
       response = self.class.get('')
       return response
     end
 
   def format response
-    noticias = []
-      response["data"]["children"].each do |new|
-        res = {}      
-        res["autor"] = new["data"]["author"]
-        res["title"] = new["data"]["title"]
-        res["date"] = Time.at(new["data"]["created_utc"])
-        res["link"] = new["data"]["url"]
-        res["feed"] = "reddit" 
-        noticias.push(res)
+    noticias_reddit = []
+      response["data"]["children"].each do |new|     
+        author = new["data"]["author"]
+        title = new["data"]["title"]
+        date = Time.at(new["data"]["created_utc"])
+        link = new["data"]["url"]
+        feed = "reddit" 
+        new_instance = News.new(author, title, date, link, feed).inspect
+        noticias_reddit.push(new_instance)
       end
-    return noticias
+    return noticias_reddit
   end
 end
 
 class Mashable
   include HTTParty
-  base_uri 'http://mashable.com/stories.json'
+  base_uri 'http://mashable.com/stories.json?limit=10'
 
 
-  def news
+  def getjson
     response = self.class.get('')
     return response
   end
 
   def format response
-    noticias = []
+    noticias_mashable = []
     response["new"].each do |new|
-      res = {}
-      res["author"] = new["author"]  
-      res["title"] = new["title"]
-      res["date"] = new["post_date"]
-      res["link"] = new["link"]
-      res["feed"] = "mashable"
-      noticias.push(res)
+      author = new["author"]  
+      title = new["title"]
+      date = new["post_date"]
+      link = new["link"]
+      feed = "mashable"
+      new_instance = News.new(author, title, date, link, feed).inspect
+      noticias_mashable.push(new_instance)
     end
 
 # Verificar como haher merge de todas las noticias
@@ -120,7 +132,7 @@ class Mashable
     #   resn["date"] = new["post_date"]
     #   resn["link"] = new["link"]
     #   resn["feed"] = "mashable"
-    #   noticias.push(resn)
+    #   noticias_mashable.push(resn)
     # end
 
     # response["rising"].each do |new|
@@ -130,46 +142,47 @@ class Mashable
     #   ress["date"] = new["post_date"]
     #   ress["link"] = new["link"]
     #   ress["feed"] = "mashable"
-    #   noticias.push(ress)
+    #   noticias_mashable.push(ress)
     # end
-    return noticias
+    return noticias_mashable
   end
 end
 
 class Digg
   include HTTParty
-  base_uri 'https://digg.com/api/news/popular.json'
+  base_uri 'https://digg.com/api/news/popular.json?limit=10'
 
 
-  def news
+  def getjson
     response = self.class.get('')
     return response
   end
 
   def format response
-    noticias = []
+    noticias_digg = []
     response["data"]["feed"].each do |new|
-      res = {}
-      res["author"] = new["content"]["author"] 
-      res["title"] = new["content"]["title_alt"]
-      res["date"] = Time.at(new["date_published"])
-      res["link"] = new["content"]["url"]
-      res["feed"] = "digg"
-      noticias.push(res)
+      author = new["content"]["author"] 
+      title = new["content"]["title_alt"]
+      date = Time.at(new["date_published"])
+      link = new["content"]["url"]
+      feed = "digg"
+      new_instance = News.new(author, title, date, link, feed).inspect
+      noticias_digg.push(new_instance)
     end
-    return noticias
+    return noticias_digg
   end
 end
 
 def main
-  while true
-    init = Feed.new
-    puts "¿Que sitio de noticias desea ver? Opciones: reddit, mashable, digg.".colorize(:blue)
-    site = gets.chomp.to_s.downcase
-    puts init.new site
-    puts "¿Que author quieres ver?"
-    # author = gets.chomp.to_s.downcase
-    # puts init.author author
+  1.times do
+    r = Feed.new
+    r.new "reddit"
+
+    m = Feed.new
+    m.new "mashable"
+
+    d = Feed.new
+    d.new "digg"
   end
 end
 
