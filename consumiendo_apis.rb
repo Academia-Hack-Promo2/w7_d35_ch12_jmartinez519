@@ -42,7 +42,7 @@ class Feed
        @formato_mashable = @m.format @m.getjson
        @newsarr.push(@formato_mashable)
        puts "===============================================".colorize(:blue)
-       puts "\t\tMashable".colorize(:blue)
+       puts "\t\t Mashable".colorize(:blue)
        puts "===============================================".colorize(:blue)
        puts @newsarr
      when site == "digg"
@@ -73,6 +73,14 @@ class News
     @feed = feed
   end
 
+  def to_s
+     format_news = "\n#{@author}"\
+                   "\n#{@title}"\
+                   "\n#{@date}"\
+                   "\n#{@feed}"
+    return format_news
+  end
+
 end
 
 class Reddit
@@ -93,8 +101,9 @@ class Reddit
         date = Time.at(new["data"]["created_utc"])
         link = new["data"]["url"]
         feed = "reddit" 
-        new_instance = News.new(author, title, date, link, feed).inspect
-        noticias_reddit.push(new_instance)
+        noticias_reddit.push(new_instance = News.new(author, title, date, 
+                            link, feed))
+        # noticias_reddit.push(new_instance)
       end
     return noticias_reddit
   end
@@ -118,8 +127,9 @@ class Mashable
       date = new["post_date"]
       link = new["link"]
       feed = "mashable"
-      new_instance = News.new(author, title, date, link, feed).inspect
-      noticias_mashable.push(new_instance)
+      noticias_mashable.push(new_instance = News.new(author, title, date, 
+                            link, feed))
+      # noticias_mashable.push(new_instance)
     end
 
 # Verificar como haher merge de todas las noticias
@@ -166,8 +176,9 @@ class Digg
       date = Time.at(new["date_published"])
       link = new["content"]["url"]
       feed = "digg"
-      new_instance = News.new(author, title, date, link, feed).inspect
-      noticias_digg.push(new_instance)
+      noticias_digg.push(new_instance = News.new(author, title, date, link, 
+                        feed))
+      # noticias_digg.push(new_instance)
     end
     return noticias_digg
   end
