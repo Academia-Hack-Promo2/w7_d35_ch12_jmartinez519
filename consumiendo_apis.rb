@@ -26,22 +26,22 @@ class Feed
 
   def new site
     case
-      when site == "reddit"
-        @r = Reddit.new
-        @formato_reddit = @r.format @r.news
-        @newsarr.push(@formato_reddit)
-        puts @newsarr.first
-      when site == "mashable"
-        @m = Mashable.new
-        @formato_mashable = @m.format @m.news
-        @newsarr.push(@formato_mashable)
-        puts @newsarr
-      when site == "digg"
-        @d = Digg.new
-        @formato_digg = @d.format @d.news
-        @newsarr.push(@formato_digg)
-        puts @newsarr
-      else
+     when site == "reddit"
+       @r = Reddit.new
+       @formato_reddit = @r.format @r.news
+       @newsarr.push(@formato_reddit)
+       puts @newsarr.first
+     when site == "mashable"
+       @m = Mashable.new
+       @formato_mashable = @m.format @m.news
+       @newsarr.push(@formato_mashable)
+       puts @newsarr
+     when site == "digg"
+       @d = Digg.new
+       @formato_digg = @d.format @d.news
+       @newsarr.push(@formato_digg)
+       puts @newsarr
+     else
       return "Error en el nombre del site"
     end
   end
@@ -54,6 +54,13 @@ class Feed
   #   end 
   # end
 
+end
+
+class Noticias
+
+  def res
+
+  end
 end
 
 class Reddit
@@ -167,6 +174,13 @@ def main
 end
 
 main
+
+# r = Feed.new(:reddit)
+# r.First.author
+
+# d = Feed.now(:digg)
+# d.First.author
+# d.First.Feed
 
 
 
