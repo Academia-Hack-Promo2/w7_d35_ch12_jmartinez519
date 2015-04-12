@@ -106,7 +106,6 @@ class Reddit
         feed = "reddit" 
         noticias_reddit.push(new_instance = News.new(author, title, date, 
                             link, feed))
-        # noticias_reddit.push(new_instance)
       end
     return noticias_reddit
   end
@@ -132,7 +131,6 @@ class Mashable
       feed = "mashable"
       noticias_mashable.push(new_instance = News.new(author, title, date, 
                             link, feed))
-      # noticias_mashable.push(new_instance)
     end
 
 # Verificar como haher merge de todas las noticias
@@ -181,7 +179,6 @@ class Digg
       feed = "digg"
       noticias_digg.push(new_instance = News.new(author, title, date, link, 
                         feed))
-      # noticias_digg.push(new_instance)
     end
     return noticias_digg
   end
@@ -190,7 +187,6 @@ end
 def main
   1.times do
     r = Feed.new(:reddit)
-    r
 
     m = Feed.new(:mashable)
 
