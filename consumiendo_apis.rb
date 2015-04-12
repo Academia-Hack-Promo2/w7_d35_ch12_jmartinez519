@@ -20,15 +20,13 @@ require 'httparty'
 require 'colorize'
 
 # Instacia las clases Reddit, Mashable y Digg.
-#  
-class Feed
-  def initialize
-    @newsarr = []
-  end
 
-  def new site
+class Feed
+   
+  def initialize site
+    @newsarr = []
     case
-     when site == "reddit"
+     when site == :reddit
        @r = Reddit.new
        @formato_reddit = @r.format @r.getjson
        @newsarr.push(@formato_reddit)
@@ -37,7 +35,7 @@ class Feed
        puts "\t\t\tReddit".colorize(:yellow)
        puts "===============================================".colorize(:yellow)
        puts @newsarr
-     when site == "mashable"
+     when site == :mashable
        @m = Mashable.new
        @formato_mashable = @m.format @m.getjson
        @newsarr.push(@formato_mashable)
@@ -45,7 +43,7 @@ class Feed
        puts "\t\t Mashable".colorize(:blue)
        puts "===============================================".colorize(:blue)
        puts @newsarr
-     when site == "digg"
+     when site == :digg
        @d = Digg.new
        @formato_digg = @d.format @d.getjson
        @newsarr.push(@formato_digg)
@@ -58,12 +56,16 @@ class Feed
     end
   end
 
+  def first
+    puts @newsarr
+  end
+
 end
 
 # Instancia cada noticia para poder acceder a sus atributos.
 class News
 
-  attr_accessor :author, :title, :date, :link, :feed 
+  attr_reader :author, :title, :date, :link, :feed 
 
   def initialize(author, title, date, link, feed)
     @author = author
@@ -187,22 +189,14 @@ end
 
 def main
   1.times do
-    r = Feed.new
-    r.new "reddit"
+    r = Feed.new(:reddit)
+    r
 
-    m = Feed.new
-    m.new "mashable"
+    m = Feed.new(:mashable)
 
-    d = Feed.new
-    d.new "digg"
+    d = Feed.new(:digg)
   end
 end
 
 main
 
-# r = Feed.new(:reddit)
-# r.First.author
-
-# d = Feed.now(:digg)
-# d.First.author
-# d.First.Feed
