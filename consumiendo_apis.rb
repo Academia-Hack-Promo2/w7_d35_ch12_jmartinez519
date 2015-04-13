@@ -185,13 +185,7 @@ class Digg
 end
 
 def main
-  1.times do
-    r = Feed.new(:reddit)
-
-    m = Feed.new(:mashable)
-
-    d = Feed.new(:digg)
-  end
+#agregue las consultas
 end
 
 main
